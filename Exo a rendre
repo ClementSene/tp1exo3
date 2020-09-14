@@ -1,0 +1,190 @@
+#pragma hdrstop
+#pragma argsused
+
+#include <stdio.h>
+
+#ifdef _WIN32
+#include <tchar.h>
+#else
+  typedef char _TCHAR;
+  #define _tmain main
+#endif
+
+	const char * filename = "\eleve";
+
+typedef struct student
+{
+	char nom[20];
+	char prenom[20];
+	char classe[10];
+	char adresse[100];
+
+}information;
+
+
+int addStudent(int *nbeleve)
+{
+	information tab [100];
+
+	int i=0;
+
+	printf("Saisir le nombre d'eleve, au maximum 100\n");
+	scanf("%d",&nbeleve);
+
+	while(nbeleve<0 || nbeleve>100)
+	{
+		printf("Saisir le nombre d'eleve, au maximum 100\n");
+		scanf("%d",&nbeleve);
+	}
+
+	 while(i<nbeleve)
+	{
+		printf("Saisir le nom de l'eleve: ");
+		scanf("%s",&tab[i].nom);
+
+		printf("Saisir le prenom de l'eleve: ");
+		scanf("%s",&tab[i].prenom);
+
+		printf("Saisir le classe de l'eleve: ");
+		scanf("%s",&tab[i].classe);
+
+		printf("Saisir le adresse de l'eleve: ");
+		fflush (stdin);
+		gets(&tab[i].adresse);
+		i++;
+	}
+   return nbeleve;
+}
+
+int displayStudent(int *nombre)
+{
+	information tab [100];
+	int i=0;
+
+	 while(i<nombre)
+	 {
+		printf(" %s ",tab[i].nom);
+		printf("%s ",tab[i].prenom);
+		printf("en classe de %s ",tab[i].classe);
+		printf("habite %s \n\n",tab[i].adresse);
+		i++;
+	 }
+
+   system("PAUSE");
+}
+
+
+int saveStudent(information *tab,int *nombre,FILE *fichier)
+{
+	char lien[100];
+	int i;
+	printf("Ecrire le lien du doc: ");
+	scanf("%s", &lien);
+	fichier = fopen(lien, "r+");
+
+	fwrite(nombre, sizeof(int),1,fichier);
+	fwrite(tab, sizeof(information),100,fichier);
+}
+
+int loadStudent (int *nombre)
+{
+	information tab [100];
+	int i=0;
+
+	while(i<nombre)
+	{
+		FILE * stream = fopen( filename, "r" );
+
+		fprintf(" %s ",tab[i].nom);
+		fprintf("%s ",tab[i].prenom);
+		fprintf("en classe de %s ",tab[i].classe);
+		fprintf("habite %s \n\n",tab[i].adresse);
+
+	}
+
+}
+
+
+int Menu(int *fin)
+{
+  int Option,nombre,nbeleve;
+   information tab [100];
+	FILE *fichier;
+
+	 system("cls");
+	 printf("-------------------------------------\n");
+	 printf("|              MENU                 |\n");
+	 printf("-------------------------------------\n\n");
+
+ printf("Veuillez choisir l'option souhaiter\n\n");
+   printf("1.Saisir les eleves\n");
+   printf("2.Afficher les eleves\n");
+   printf("3.Sauvegarder les eleves dans un fichier\n");
+   printf("4.Charger un fichier d'eleves\n");
+   printf("5.Quitter\n\n");
+   printf("Option choisit: ");
+   scanf("%d",&Option);
+
+   while(Option<1 || Option>5)
+   {
+	 printf("Saisir une option existante: ");
+   scanf("%d",&Option);
+   }
+
+	 switch (Option)
+{
+
+case 1:
+system("cls");
+
+	nombre=addStudent(nbeleve);
+	printf("Nombre d'eleve: %d\n\n",nombre);
+  break;
+
+
+case 2:
+system("cls");
+  displayStudent(nombre);
+
+  break;
+
+
+case 3:
+system("cls");
+
+saveStudent(tab,nombre,fichier);
+
+  break;
+
+case 4:
+system("cls");
+
+loadStudent(nombre);
+
+  break;
+
+
+case 5:
+system("cls");
+  printf(" Au revoir!! \n\n");
+  fin = 0;
+  return fin;
+
+  break;
+
+ }
+}
+
+int _tmain(int argc, _TCHAR* argv[])
+{
+   FILE *fichier;
+  int i=1;
+  int fin =1;
+	 do{
+		 i=Menu(fin);
+		} while(i!=0);
+
+	system("PAUSE");
+	return 0;
+
+}
